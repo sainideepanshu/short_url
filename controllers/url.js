@@ -17,7 +17,9 @@ async function handleGenerateNewShortUrl(req, res) {
     visitHistory: [],
   });
 
-  return res.status(201).json({ id: shortId });
+  return res.render("home",{ id: shortId });  // For server side rendering
+
+  //return res.status(201).json({ id: shortId });  // For client side rendering
 }
 
 async function handleGetAnalytics(req, res) {

@@ -1,7 +1,7 @@
 const express = require("express");
 
 const app = express();
-
+const path = require("path"); // built in module
 const urlRoutes = require("./routes/url.js");
 
 const { connectToMongoDB } = require("./connect.js");
@@ -12,9 +12,21 @@ const PORT = 8001;
 
 connectToMongoDB("mongodb://127.0.0.1:27017/short-url");
 
+// set the view engine to ejs
+app.set('view engine', 'ejs'); // telling express that my view engine is ejs
+
+app.set("views",path.resolve("./views"));  // telling that all my ejs files/views are in ./views folder
+
 app.use(express.json()); // this middleware will help in parsing the incoming client request body
 
 app.use("/url", urlRoutes);
+
+app.get("/test", async (req,res) => {
+
+  const allURLs = await URL.find({});
+  return res.render("home");
+
+});
 
 // Redirects the user to the original url
 app.get("/url/:shortId", async (req, res) => {

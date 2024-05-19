@@ -4,7 +4,9 @@ const app = express();
 const path = require("path"); // built in module
 const urlRoutes = require("./routes/url.js");
 const staticRoute = require("./routes/staticRouter.js");
+const userRoute = require("./routes/user.js");
 const { connectToMongoDB } = require("./connect.js");
+const cookieParser = require("cookie-parser");
 
 const URL = require("./models/url.js");
 
@@ -21,8 +23,13 @@ app.use(express.json()); // this middleware will help in parsing the incoming cl
 
 app.use(express.urlencoded({extended:false,})); // this middleware will help in parsing the form data from incoming ejs form data request body
 
-app.use("/url", urlRoutes);
-app.use("/",staticRoute);
+app.use(cookieParser()); // this middleware will help in parsing the cookies
+
+const {restrictToLoggedinUserOnly,checkAuth} = require("./middlewares/auth.js");
+
+app.use("/url",restrictToLoggedinUserOnly, urlRoutes);
+app.use("/",checkAuth,staticRoute);
+app.use("/user",userRoute);
 
 app.get("/test", async (req, res) => {
   const allURLs = await URL.find({});

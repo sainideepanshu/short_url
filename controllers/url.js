@@ -15,6 +15,7 @@ async function handleGenerateNewShortUrl(req, res) {
     shortId: shortId,
     redirectUrl: body.url,
     visitHistory: [],
+    createdBy: req.user._id,  // req.user is coming from restrictToLoggedinUserOnly middleware as we are attaching user to req.user there
   });
 
   return res.render("home",{ id: shortId });  // For server side rendering

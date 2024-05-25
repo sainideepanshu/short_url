@@ -7,6 +7,7 @@ const staticRoute = require("./routes/staticRouter.js");
 const userRoute = require("./routes/user.js");
 const { connectToMongoDB } = require("./connect.js");
 const cookieParser = require("cookie-parser");
+const {restrictTo,checkForAuthentication} = require("./middlewares/auth.js");
 
 const URL = require("./models/url.js");
 
@@ -25,10 +26,10 @@ app.use(express.urlencoded({extended:false,})); // this middleware will help in 
 
 app.use(cookieParser()); // this middleware will help in parsing the cookies
 
-const {restrictToLoggedinUserOnly,checkAuth} = require("./middlewares/auth.js");
+app.use(checkForAuthentication);
 
-app.use("/url",restrictToLoggedinUserOnly, urlRoutes);
-app.use("/",checkAuth,staticRoute);
+app.use("/url",restrictTo(['NORMAL','ADMIN']), urlRoutes);
+app.use("/",staticRoute);
 app.use("/user",userRoute);
 
 app.get("/test", async (req, res) => {

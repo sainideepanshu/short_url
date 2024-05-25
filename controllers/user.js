@@ -28,17 +28,14 @@ async function handleUserLogin(req,res){
     if(!user){
         return res.render("login",{
             error:"Invalid username or password",
-        })
+        });
     }
 
     const token = setUser(user);
-    /*
-    res.cookie("uid",token); // attaching cookie in response , we can set domain also in cookies , means the set domain can only access this cookie , we can also set expiry date in cookies
+    
+    res.cookie("token",token); // attaching cookie in response , we can set domain also in cookies , means the set domain can only access this cookie , we can also set expiry date in cookies
 
     return res.redirect("/");
-    */
-
-    res.json({token});
 
 }
 

@@ -32,9 +32,13 @@ async function handleUserLogin(req,res){
     }
 
     const token = setUser(user);
-    res.cookie("uid",token); // attaching cookie in response
+    /*
+    res.cookie("uid",token); // attaching cookie in response , we can set domain also in cookies , means the set domain can only access this cookie , we can also set expiry date in cookies
 
     return res.redirect("/");
+    */
+
+    res.json({token});
 
 }
 
